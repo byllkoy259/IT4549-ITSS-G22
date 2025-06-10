@@ -118,6 +118,16 @@ CREATE TABLE Prescriptions (
     FOREIGN KEY (record_id) REFERENCES MedicalRecords(record_id) ON DELETE CASCADE
 );
 
+CREATE TABLE Staff (
+    staff_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    staff_name VARCHAR(40) NOT NULL,
+    staff_email VARCHAR(40) UNIQUE,
+    staff_password VARCHAR(140) NOT NULL,
+    staff_role VARCHAR(40), -- lễ tân, chăm sóc, grooming, tạp vụ...
+    phone VARCHAR(20),
+    address VARCHAR(100)
+);
+
 CREATE TABLE BoardingBookings (
     boarding_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     pet_id BIGINT UNSIGNED NOT NULL,
@@ -159,17 +169,6 @@ CREATE TABLE SpaRecords (
     FOREIGN KEY (service_id) REFERENCES Services(service_id) ON DELETE SET NULL,
     FOREIGN KEY (staff_id) REFERENCES Staff(staff_id) ON DELETE SET NULL,
     FOREIGN KEY (veterinarian_id) REFERENCES Veterinarians(veterinarian_id) ON DELETE SET NULL
-);
-
-
-CREATE TABLE Staff (
-    staff_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    staff_name VARCHAR(40) NOT NULL,
-    staff_email VARCHAR(40) UNIQUE,
-    staff_password VARCHAR(140) NOT NULL,
-    staff_role VARCHAR(40), -- lễ tân, chăm sóc, grooming, tạp vụ...
-    phone VARCHAR(20),
-    address VARCHAR(100)
 );
 
 -- ---------------------------------------------------
