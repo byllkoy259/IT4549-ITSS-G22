@@ -31,3 +31,61 @@
 - **Cơ sở dữ liệu**: MySQL
 - **Giao diện người dùng**: React, CSS, JavaScript, Bootstrap
 - **Bảo mật**: Xác thực bằng JWT, phân quyền theo vai trò (admin, bác sĩ, chủ nuôi)
+
+---
+
+## 🚀 Hướng dẫn sử dụng hệ thống
+
+### 1. Cài đặt phụ thuộc
+
+Trước tiên, đảm bảo bạn đã cài đặt Node.js. Sau đó, tại thư mục gốc của dự án, chạy:
+
+```bash
+npm install
+```
+
+### 2. Khởi động ứng dụng
+
+**Frontend:**
+```bash
+cd FrontEnd
+npm run dev
+```
+
+**Backend:**
+```bash
+cd BackEnd
+npm start
+```
+
+### 3. Cấu hình cơ sở dữ liệu (MySQL bằng Docker)
+
+**Bước 1:** Chạy container MySQL:
+
+```bash
+docker run --name vms-mysql -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql
+```
+
+**Bước 2:** Đăng nhập vào MySQL và tạo database:
+
+```sql
+CREATE DATABASE veterina_vz;
+```
+
+**Bước 3:** Chạy file `ITSS data.sql` trong thư mục `Database/` để tạo bảng và dữ liệu mẫu.
+
+---
+
+## 📁 Cấu trúc thư mục dự án
+
+```
+IT4549-ITSS-G22/
+├── BackEnd/                 # Mã nguồn backend (Node.js + Express)
+├── FrontEnd/                # Giao diện frontend (React)
+├── Database/
+│   └── ITSS data.sql        # Tập tin SQL khởi tạo cơ sở dữ liệu
+├── .gitignore
+├── package-lock.json
+├── projektna_naloga_SQL.txt
+└── README.md
+```
