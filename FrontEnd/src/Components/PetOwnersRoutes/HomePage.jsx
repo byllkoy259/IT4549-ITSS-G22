@@ -29,7 +29,7 @@ const HomePage = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/owner-login");
+    navigate("/");
   };
 
   return (
@@ -39,7 +39,7 @@ const HomePage = () => {
         <MDBContainer fluid>
           <MDBNavbarBrand href="/" style={{ fontWeight: 'bold' }}>PetCare Pro</MDBNavbarBrand>
           <MDBNavbarNav className="justify-content-center">
-            <MDBNavbarItem>
+            {/* <MDBNavbarItem>
               <MDBNavbarLink href="/dashboard" className="text-white">Bảng điều khiển</MDBNavbarLink>
             </MDBNavbarItem>
             <MDBNavbarItem>
@@ -50,7 +50,7 @@ const HomePage = () => {
             </MDBNavbarItem>
             <MDBNavbarItem>
               <MDBNavbarLink href="/services" className="text-white">Dịch vụ</MDBNavbarLink>
-            </MDBNavbarItem>
+            </MDBNavbarItem> */}
           </MDBNavbarNav>
           <MDBBtn
             color="transparent"

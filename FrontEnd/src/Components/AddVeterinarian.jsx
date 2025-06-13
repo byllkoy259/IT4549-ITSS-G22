@@ -20,81 +20,66 @@ const AddVeterinarian = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("[invalid url, do not cite]")
-      .then((result) => {
-        if (result.data.Status) {
-          setSpecialization(result.data.Result);
-        } else {
-          setError(result.data.Error || "Không thể tải danh sách chuyên ngành.");
-        }
-      })
-      .catch((err) => {
-        console.error("Lỗi khi tải danh sách chuyên ngành:", err);
-        setError("Đã xảy ra lỗi khi tải danh sách chuyên ngành: " + (err.message || "Không xác định"));
-      });
+  axios
+    .get("http://localhost:3000/auth/vet-types")
 
-    axios
-      .get("[invalid url, do not cite]")
-      .then((result) => {
-        if (result.data.Status) {
-          setCategory(result.data.Result);
-        } else {
-          setError(result.data.Error || "Không thể tải danh sách danh mục.");
-        }
-      })
-      .catch((err) => {
-        console.error("Lỗi khi tải danh sách danh mục:", err);
-        setError("Đã xảy ra lỗi khi tải danh sách danh mục: " + (err.message || "Không xác định"));
-      });
+    .then(res => {
+      if (res.data.Status) setSpecialization(res.data.Result);
+      else setError(res.data.Error || "Không thể tải danh sách chuyên ngành");
+    });
+  axios
+    .get("http://localhost:3000/auth/categories")
+    .then(res => {
+      if (res.data.Status) setCategory(res.data.Result);
+      else setError(res.data.Error || "Không thể tải danh sách danh mục");
+    });
+  axios
+    .get("http://localhost:3000/auth/role-types")
+    .then(res => {
+      if (res.data.Status) setRole(res.data.Result);
+      else setError(res.data.Error || "Không thể tải danh sách vai trò");
+    });
+}, []);
 
-    axios
-      .get("[invalid url, do not cite]")
-      .then((result) => {
-        if (result.data.Status) {
-          setRole(result.data.Result);
-        } else {
-          setError(result.data.Error || "Không thể tải danh sách vai trò.");
-        }
-      })
-      .catch((err) => {
-        console.error("Lỗi khi tải danh sách vai trò:", err);
-        setError("Đã xảy ra lỗi khi tải danh sách vai trò: " + (err.message || "Không xác định"));
-      });
-  }, []);
+
+
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (
-      !veterinarian.veterinarian_name ||
-      !veterinarian.veterinarian_email ||
-      !veterinarian.veterinarian_password ||
-      !veterinarian.veterinarian_address ||
-      !veterinarian.specialization_id ||
-      !veterinarian.category_id ||
-      !veterinarian.role_id
-    ) {
-      setError("Vui lòng nhập đầy đủ thông tin!");
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    axios
-      .post("[invalid url, do not cite] veterinarian")
-      .then((result) => {
-        if (result.data.Status) {
-          navigate("/dashboard/veterinarians");
-        } else {
-          setError(result.data.Error || "Thêm bác sĩ thú y không thành công.");
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Lỗi khi thêm bác sĩ thú y:", err);
-        setError("Đã xảy ra lỗi khi thêm bác sĩ thú y: " + (err.message || "Không xác định"));
-        setLoading(false);
-      })
+  e.preventDefault();
+  if (
+    !veterinarian.veterinarian_name ||
+    !veterinarian.veterinarian_email ||
+    !veterinarian.veterinarian_password ||
+    !veterinarian.veterinarian_address ||
+    !veterinarian.specialization_id ||
+    !veterinarian.category_id ||
+    !veterinarian.role_id
+  ) {
+    setError("Vui lòng nhập đầy đủ thông tin!");
+    return;
+  }
+  setLoading(true);
+  setError(null);
+  const data = {
+    ...veterinarian,
+    specialization_id: Number(veterinarian.specialization_id),
+    category_id: Number(veterinarian.category_id),
+    role_id: Number(veterinarian.role_id)
   };
+  axios
+    .post("http://localhost:3000/auth/add-veterinarian", data)
+    .then(result => {
+      if (result.data.Status) navigate("/dashboard/veterinarians");
+      else setError(result.data.Error || "Thêm bác sĩ thú y không thành công.");
+      setLoading(false);
+    })
+    .catch(err => {
+      setError("Đã xảy ra lỗi khi thêm bác sĩ thú y: " + (err.message || "Không xác định"));
+      setLoading(false);
+    });
+};
+
+
 
   return (
     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -114,8 +99,11 @@ const AddVeterinarian = () => {
               id="inputName"
               placeholder="Nhập tên bác sĩ thú y"
               value={veterinarian.veterinarian_name}
-              onChange={(e) =>
-                setVeterinarian({ ...veterinarian, veterinarian_name: e.target.value })
+              onChange={e =>
+                setVeterinarian({
+                  ...veterinarian,
+                  category_id: parseInt(e.target.value, 10)
+                })
               }
               disabled={loading}
             />

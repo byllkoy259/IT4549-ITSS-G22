@@ -74,12 +74,12 @@ const Dashboard = () => {
                 <span>Danh mục</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/dashboard/profile" className="sidebar-link">
                 <i className="bi-person"></i>
                 <span>Hồ sơ</span>
               </Link>
-            </li>
+            </li> */}
             <li onClick={handleLogout}>
               <span className="sidebar-link logout-link" role="button">
                 <i className="bi-power"></i>

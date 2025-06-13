@@ -129,10 +129,10 @@ router.post('/add-category', (req, res) => {
 router.get('/vet-types', (req, res) => {
     const sql = "SELECT * FROM specialization";
     con.query(sql, (err, result) => {
-        if (err) return res.json({ Status: false, Error: "Query Error" })
-        return res.json({ Status: true, Result: result })
-    })
-})
+        if (err) return res.json({ Status: false, Error: "Query Error" });
+        return res.json({ Status: true, Result: result });
+    });
+});
 
 //ROLES ROUTES
 
@@ -237,7 +237,7 @@ router.post("/add-veterinarian", (req, res) => {
     const values = [
         req.body.veterinarian_name,
         req.body.veterinarian_email,
-        req.body.veterinarian_password, // Lưu mật khẩu dạng văn bản thô
+        req.body.veterinarian_password, // <-- Dạng thô
         req.body.veterinarian_address,
         req.body.specialization_id,
         req.body.category_id,
@@ -248,6 +248,7 @@ router.post("/add-veterinarian", (req, res) => {
         return res.json({ Status: true });
     });
 });
+
 
 
 
@@ -660,9 +661,13 @@ router.get("/appointment/:id", (req, res) => {
 })
 
 router.post("/add-appointment", (req, res) => {
-    const sql = "INSERT INTO appointments (appointments_created_at, appointments_starts_at, appointments_ends_at, owner_id, veterinarian_id, pet_id, service_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const sql = `
+      INSERT INTO appointments
+        (appointments_created_at, appointments_starts_at, appointments_ends_at, owner_id, veterinarian_id, pet_id, service_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
     const values = [
-        req.body.appointments_created_at,
+        req.body.appointments_created_at || new Date(), // tự động nếu không gửi
         req.body.appointments_starts_at,
         req.body.appointments_ends_at,
         req.body.owner_id,
@@ -671,14 +676,18 @@ router.post("/add-appointment", (req, res) => {
         req.body.service_id,
     ];
     con.query(sql, values, (err, result) => {
-        if (err) return res.json({ Status: false, Error: err })
-        return res.json({ Status: true })
-    })
+        if (err) return res.json({ Status: false, Error: err });
+        return res.json({ Status: true, InsertId: result.insertId });
+    });
 });
 
 router.put("/edit-appointment/:id", (req, res) => {
     const id = req.params.id;
-    const sql = `UPDATE appointments SET appointments_starts_at = ?, appointments_ends_at = ?, owner_id = ?, veterinarian_id = ?, pet_id = ?, service_id = ? WHERE appointments_id = ?`;
+    const sql = `
+  UPDATE appointments 
+  SET appointments_starts_at = ?, appointments_ends_at = ?
+  WHERE appointments_id = ?
+`;
     const values = [
         req.body.appointments_starts_at,
         req.body.appointments_ends_at,

@@ -23,36 +23,67 @@ const OwnerAppointments = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      fetch("/owner/appointments", { credentials: "include" }).then(res => res.json()),
-      fetch("/owner/pets", { credentials: "include" }).then(res => res.json()),
-      fetch("/auth/services", { credentials: "include" }).then(res => res.json()),
-      fetch("/auth/veterinarians", { credentials: "include" }).then(res => res.json())
-    ])
-      .then(([appRes, petsRes, servicesRes, vetsRes]) => {
-        console.log("Appointments Response:", appRes);
-        console.log("Pets Response:", petsRes);
-        console.log("Services Response:", servicesRes);
-        console.log("Veterinarians Response:", vetsRes);
-        setAppointments(appRes.Status && Array.isArray(appRes.Appointments) ? appRes.Appointments : []);
-        setMyPets(petsRes.Status && Array.isArray(petsRes.Pets) ? petsRes.Pets : []);
-        setServices(servicesRes.Status && Array.isArray(servicesRes.Services) ? servicesRes.Services : []);
-        setVeterinarians(vetsRes.Status && Array.isArray(vetsRes.Veterinarians) ? vetsRes.Veterinarians : []);
-        setLoading(false);
-        if (appRes.Error || petsRes.Error || servicesRes.Error || vetsRes.Error) {
-          alert("Lỗi khi tải dữ liệu: " + (appRes.Error || petsRes.Error || servicesRes.Error || vetsRes.Error));
-          window.location = "/owner-login";
-        }
-      })
-      .catch(err => {
-        console.error("Fetch error:", err);
-        setLoading(false);
-        alert("Không thể kết nối máy chủ hoặc chưa đăng nhập!");
+  // useEffect(() => {
+  //   setLoading(true);
+  //   Promise.all([
+  //     fetch("/owner/appointments", { credentials: "include" }).then(res => res.json()),
+  //     fetch("/owner/pets", { credentials: "include" }).then(res => res.json()),
+  //     fetch("/auth/services", { credentials: "include" }).then(res => res.json()),
+  //     fetch("/auth/veterinarians", { credentials: "include" }).then(res => res.json())
+  //   ])
+  //     .then(([appRes, petsRes, servicesRes, vetsRes]) => {
+  //       console.log("Appointments Response:", appRes);
+  //       console.log("Pets Response:", petsRes);
+  //       console.log("Services Response:", servicesRes);
+  //       console.log("Veterinarians Response:", vetsRes);
+  //       setAppointments(appRes.Status && Array.isArray(appRes.Appointments) ? appRes.Appointments : []);
+  //       setMyPets(petsRes.Status && Array.isArray(petsRes.Pets) ? petsRes.Pets : []);
+  //       setServices(servicesRes.Status && Array.isArray(servicesRes.Services) ? servicesRes.Services : []);
+  //       setVeterinarians(vetsRes.Status && Array.isArray(vetsRes.Veterinarians) ? vetsRes.Veterinarians : []);
+  //       setLoading(false);
+  //       if (appRes.Error || petsRes.Error || servicesRes.Error || vetsRes.Error) {
+  //         alert("Lỗi khi tải dữ liệu: " + (appRes.Error || petsRes.Error || servicesRes.Error || vetsRes.Error));
+  //         window.location = "/owner-login";
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.error("Fetch error:", err);
+  //       setLoading(false);
+  //       alert("Không thể kết nối máy chủ hoặc chưa đăng nhập!");
+  //       window.location = "/owner-login";
+  //     });
+  // }, []);
+
+
+useEffect(() => {
+  setLoading(true);
+  Promise.all([
+    fetch("/owner/appointments", { credentials: "include" }).then(res => res.json()),
+    fetch("/owner/pets", { credentials: "include" }).then(res => res.json()),
+    fetch("/owner/services", { credentials: "include" }).then(res => res.json()),
+    fetch("/owner/veterinarians", { credentials: "include" }).then(res => res.json())
+  ])
+    .then(([appRes, petsRes, servicesRes, vetsRes]) => {
+      setAppointments(appRes.Status && Array.isArray(appRes.Appointments) ? appRes.Appointments : []);
+      setMyPets(petsRes.Status && Array.isArray(petsRes.Pets) ? petsRes.Pets : []);
+      setServices(servicesRes.Status && Array.isArray(servicesRes.Services) ? servicesRes.Services : []);
+      setVeterinarians(vetsRes.Status && Array.isArray(vetsRes.Veterinarians) ? vetsRes.Veterinarians : []);
+      setLoading(false);
+      if (appRes.Error || petsRes.Error || servicesRes.Error || vetsRes.Error) {
+        alert("Lỗi khi tải dữ liệu: " + (appRes.Error || petsRes.Error || servicesRes.Error || vetsRes.Error));
         window.location = "/owner-login";
-      });
-  }, []);
+      }
+    })
+    .catch(err => {
+      console.error("Fetch error:", err);
+      setLoading(false);
+      alert("Không thể kết nối máy chủ hoặc chưa đăng nhập!");
+      window.location = "/owner-login";
+    });
+}, []);
+
+
+
 
   const handleSave = () => {
     if (!form.pet_id || !form.veterinarian_id || !form.service_id || !form.appointments_starts_at || !form.appointments_ends_at) {

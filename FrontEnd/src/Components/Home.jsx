@@ -161,7 +161,7 @@ const Home = () => {
     useEffect(() => {
         // Tính tổng chi phí khi sự kiện hoặc ngày thay đổi
         const filteredAppointments = events.filter((event) =>
-            moment(event.appoitments_starts_at).isBetween(
+            moment(event.appointments_starts_at).isBetween(
                 moment(startDate).startOf("day"),
                 moment(endDate).endOf("day"),
                 undefined,
@@ -172,7 +172,7 @@ const Home = () => {
     }, [events, startDate, endDate]);
 
     const filteredAppointments = events.filter((event) =>
-        moment(event.appoitments_starts_at).isBetween(
+        moment(event.appointments_starts_at).isBetween(
             moment(startDate).startOf("day"),
             moment(endDate).endOf("day"),
             undefined,
@@ -267,8 +267,8 @@ const Home = () => {
             {filteredAppointments.length > 0 ? (
               filteredAppointments.map((event) => (
                 <tr key={event.appointments_id}>
-                  <td>{moment(event.appoitments_starts_at).format("DD-MM-YYYY")}</td>
-                  <td className="text-center">{moment(event.appoitments_starts_at).format("LT")}</td>
+                  <td>{moment(event.appointments_starts_at).format("DD-MM-YYYY")}</td>
+                  <td className="text-center">{moment(event.appointments_starts_at).format("LT")}</td>
                   <td className="text-center">{moment(event.appointments_ends_at).format("LT")}</td>
                   <td>{event.service_name}</td>
                   <td>{event.pet_name}</td>
